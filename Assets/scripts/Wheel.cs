@@ -13,6 +13,7 @@ public class Wheel : MonoBehaviour {
     // 自己的检测
     void OnCollisionEnter2D(Collision2D other)
     {
+        // 和角色脚下的轮子碰撞到了 游戏结束
         if (other.gameObject.tag == "wheelOfMine")
         {
             GameControlScript.current.BirdDied();
@@ -32,7 +33,7 @@ public class Wheel : MonoBehaviour {
     }
 
     // 提供一个小鸟踩的位置
-    public virtual Vector2 GetBirdPos(Transform tran = null)
+    public virtual Vector2 GetTargetPos(Transform tran = null)
     {
         return Vector2.zero;
     }

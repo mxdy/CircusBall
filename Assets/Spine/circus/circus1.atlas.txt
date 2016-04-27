@@ -1,0 +1,146 @@
+
+circus1.png
+size: 1024,256
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+body
+  rotate: false
+  xy: 443, 73
+  size: 189, 181
+  orig: 189, 181
+  offset: 0, 0
+  index: -1
+eyel
+  rotate: false
+  xy: 634, 112
+  size: 54, 54
+  orig: 54, 54
+  offset: 0, 0
+  index: -1
+eyepl
+  rotate: false
+  xy: 794, 233
+  size: 21, 21
+  orig: 21, 21
+  offset: 0, 0
+  index: -1
+eyepr
+  rotate: false
+  xy: 760, 189
+  size: 14, 14
+  orig: 14, 14
+  offset: 0, 0
+  index: -1
+eyer
+  rotate: false
+  xy: 690, 130
+  size: 26, 36
+  orig: 26, 36
+  offset: 0, 0
+  index: -1
+head1
+  rotate: false
+  xy: 2, 44
+  size: 211, 210
+  orig: 211, 210
+  offset: 0, 0
+  index: -1
+head2
+  rotate: false
+  xy: 215, 71
+  size: 226, 183
+  orig: 226, 183
+  offset: 0, 0
+  index: -1
+hl0
+  rotate: false
+  xy: 742, 205
+  size: 50, 49
+  orig: 50, 49
+  offset: 0, 0
+  index: -1
+hl1
+  rotate: false
+  xy: 215, 2
+  size: 52, 67
+  orig: 52, 67
+  offset: 0, 0
+  index: -1
+hl2
+  rotate: true
+  xy: 269, 6
+  size: 11, 28
+  orig: 11, 28
+  offset: 0, 0
+  index: -1
+hl3
+  rotate: false
+  xy: 742, 176
+  size: 16, 27
+  orig: 16, 27
+  offset: 0, 0
+  index: -1
+hl4
+  rotate: false
+  xy: 313, 47
+  size: 17, 22
+  orig: 17, 22
+  offset: 0, 0
+  index: -1
+hr0
+  rotate: false
+  xy: 2, 2
+  size: 34, 40
+  orig: 34, 40
+  offset: 0, 0
+  index: -1
+hr1
+  rotate: false
+  xy: 269, 19
+  size: 42, 50
+  orig: 42, 50
+  offset: 0, 0
+  index: -1
+hr2
+  rotate: false
+  xy: 690, 112
+  size: 13, 16
+  orig: 13, 16
+  offset: 0, 0
+  index: -1
+hr3
+  rotate: false
+  xy: 89, 22
+  size: 13, 20
+  orig: 13, 20
+  offset: 0, 0
+  index: -1
+hr4
+  rotate: false
+  xy: 718, 145
+  size: 8, 21
+  orig: 8, 21
+  offset: 0, 0
+  index: -1
+legl
+  rotate: false
+  xy: 38, 4
+  size: 49, 38
+  orig: 49, 38
+  offset: 0, 0
+  index: -1
+legr
+  rotate: true
+  xy: 634, 79
+  size: 31, 54
+  orig: 31, 54
+  offset: 0, 0
+  index: -1
+tongue
+  rotate: false
+  xy: 634, 168
+  size: 106, 86
+  orig: 106, 86
+  offset: 0, 0
+  index: -1

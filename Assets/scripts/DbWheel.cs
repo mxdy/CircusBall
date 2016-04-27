@@ -3,7 +3,11 @@ using System.Collections;
 
 public class DbWheel : Wheel {
     public Rigidbody2D left_rb2d;        // 左轮子刚体
-    public Rigidbody2D right_rb2d;        // 右轮子刚体
+    public Rigidbody2D right_rb2d;       // 右轮子刚体
+    public Rigidbody2D body_rb2d;        // 身体刚体
+    private BoxCollider2D body_box;      // 身体boxcollider
+
+    public float targetLocalDistance;    // 目标到轮子中心的水平距离
 
     void Start()
     {
@@ -12,6 +16,9 @@ public class DbWheel : Wheel {
         validPosY += transform.position.y + heightOffset;
 
         wheelType = ConstantEnum.WheelType.db_wheel;
+
+        body_rb2d = gameObject.GetComponent<Rigidbody2D>();
+        body_box = gameObject.GetComponent<BoxCollider2D>();
     }
 
     void SetVelocity(float v)
@@ -35,14 +42,15 @@ public class DbWheel : Wheel {
         SetVelocity(-velocity);
     }
 
-    public override Vector2 GetBirdPos(Transform tran = null)
+    public override Vector2 GetTargetPos(Transform tran = null)
     {
         Vector2 v2 = Vector2.zero;
 
         if (tran)
         {
-            v2.x = tran.localPosition.x;
-            v2.y = transform.localPosition.y + 1;
+
+            v2.x = transform.position.x - targetLocalDistance;
+            v2.y = transform.position.y + body_box.size.y * transform.localScale.y - 0.4f;
         }
         else
         {
@@ -50,5 +58,10 @@ public class DbWheel : Wheel {
         }
 
         return v2;
+    }
+
+    public void SetTargetPosXDis(Transform tran)
+    {
+        targetLocalDistance = transform.position.x - tran.position.x;
     }
   }

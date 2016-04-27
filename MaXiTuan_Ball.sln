@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2015
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MaXiTuan_Ball.CSharp.Plugins", "MaXiTuan_Ball.CSharp.Plugins.csproj", "{00F76500-6E37-145D-A15D-99E4CEA0673D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MaXiTuan_Ball.CSharp", "MaXiTuan_Ball.CSharp.csproj", "{1156075F-8980-8D14-B968-9BF694BBBF26}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MaXiTuan_Ball.CSharp.Editor", "MaXiTuan_Ball.CSharp.Editor.csproj", "{950ABE50-B7F0-F58A-E263-75B0297ECC29}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{00F76500-6E37-145D-A15D-99E4CEA0673D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00F76500-6E37-145D-A15D-99E4CEA0673D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00F76500-6E37-145D-A15D-99E4CEA0673D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00F76500-6E37-145D-A15D-99E4CEA0673D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1156075F-8980-8D14-B968-9BF694BBBF26}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1156075F-8980-8D14-B968-9BF694BBBF26}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1156075F-8980-8D14-B968-9BF694BBBF26}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1156075F-8980-8D14-B968-9BF694BBBF26}.Release|Any CPU.Build.0 = Release|Any CPU
+		{950ABE50-B7F0-F58A-E263-75B0297ECC29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{950ABE50-B7F0-F58A-E263-75B0297ECC29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{950ABE50-B7F0-F58A-E263-75B0297ECC29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{950ABE50-B7F0-F58A-E263-75B0297ECC29}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

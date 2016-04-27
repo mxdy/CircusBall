@@ -3,10 +3,13 @@ using System.Collections;
 
 public class OneWheel : Wheel {
     protected Rigidbody2D rb2d;                   // 轮子的刚体
+    protected CircleCollider2D coll;              // 轮子的碰撞体
 
     void Start()
     {
         rb2d = gameObject.GetComponent<Rigidbody2D>();
+        coll = gameObject.GetComponent<CircleCollider2D>();
+
         validPosY += transform.position.y + heightOffset;
 
         rb2d.velocity = new Vector2(velocity, 0);
@@ -28,12 +31,12 @@ public class OneWheel : Wheel {
         Destroy(gameObject);
     }
 
-    public override Vector2 GetBirdPos(Transform tran = null)
+    public override Vector2 GetTargetPos(Transform tran = null)
     {
         Vector2 v2;
 
-        v2.x = transform.localPosition.x;
-        v2.y = transform.localPosition.y + 1;
+        v2.x = transform.position.x;
+        v2.y = transform.position.y + coll.radius * transform.localScale.y + tran.GetComponent<CircleCollider2D>().radius * tran.localScale.y;
 
         return v2;
     }
