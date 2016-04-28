@@ -17,25 +17,38 @@ public class ClownControl : MonoBehaviour {
     float angleSpeed = 1f;  // 旋转速度（角度）
     float radius;   // 围绕半径
     bool isLeft = true; // 是否掉落在左边
+    CircleCollider2D plyerCollider; // 角色的碰撞体
+
+    bool isOnPlan = true;
+
+    const float CHANGEOFFSET = 15;
 
     ConstantEnum.WheelType wheelType = ConstantEnum.WheelType.one_wheel;
 
     // Use this for initialization
     void Start () {
         rb2d = gameObject.GetComponent<Rigidbody2D>();
+        plyerCollider = gameObject.GetComponent<CircleCollider2D>();
 
         skelAni = gameObject.GetComponent<SkeletonAnimation>();
+
+        GameControlScript.current.clown = gameObject;
     }
 	
 	// Update is called once per frame
 	void Update () {
         if (!GameControlScript.current.isGameOver && !isAir)
         {
-            if (Input.GetKeyDown(KeyCode.J))
+            if (Input.GetKeyDown(KeyCode.J) || Input.touchCount > 0)
             {
                 isJp = true;
 
-                targetWheel.DestoryMyself();
+                if (targetWheel)
+                {
+                    targetWheel.SetVelocity(-8);
+                }
+
+                if (isOnPlan) isOnPlan = false;
             }
         }
     }
@@ -53,15 +66,15 @@ public class ClownControl : MonoBehaviour {
             rb2d.AddForce(new Vector2(0, upForce));
 
             skelAni.state.SetAnimation(0, "up", false);
+
+            rb2d.gravityScale = 1;
         }
 
         // after jump
         if (!isAir)
         {
-            rb2d.isKinematic = true;
-
-            //endPos = targetWheel.GetTargetPos(transform);
-            //transform.position = endPos;
+            // 矫正角色位置前需要关掉重力
+            rb2d.gravityScale = 0;
 
             switch (wheelType)
             {
@@ -69,7 +82,7 @@ public class ClownControl : MonoBehaviour {
                     // 不管左边还是右边都向中间靠拢
                     if (isLeft)
                     {
-                        angleSpeed += 20 * Time.deltaTime * 4;
+                        angleSpeed += CHANGEOFFSET * Time.deltaTime * 4;
                         if (angleSpeed >= 90f)
                         {
                             angleSpeed = 90f;
@@ -77,29 +90,22 @@ public class ClownControl : MonoBehaviour {
                     }
                     else
                     {
-                        angleSpeed -= 20 * Time.deltaTime * 3;
+                        angleSpeed -= CHANGEOFFSET * Time.deltaTime * 4;
                         if (angleSpeed <= 90f)
                         {
                             angleSpeed = 90f;
                         }
                     }
 
-                    float angle = angleSpeed * Mathf.PI / 180;
+                    float angle = angleSpeed * Mathf.Deg2Rad;
 
 
-                    if (isLeft)
-                    {
-                        endPos.x = centerPos.x - Mathf.Cos(angle) * radius;
-                    }
-                    else
-                    {
-                        endPos.x = centerPos.x - Mathf.Cos(angle) * radius;
-                    }
-                    endPos.x = targetWheel.transform.position.x;
-                    endPos.y = centerPos.y + Mathf.Sin(angle) * radius - 0.2f;
+                    endPos.x = targetWheel.transform.position.x - Mathf.Cos(angle) * radius;
+                    endPos.y = centerPos.y + Mathf.Sin(angle) * radius;
                     break;
                 case ConstantEnum.WheelType.db_wheel:
                     endPos = targetWheel.GetTargetPos(transform);
+                    endPos.y -= plyerCollider.radius * transform.localScale.y;
                     break;
                 default:
                     break;
@@ -147,6 +153,9 @@ public class ClownControl : MonoBehaviour {
         // 掉落高度不够的话也判定死亡
         float valid_y = other.gameObject.GetComponent<Wheel>().validPosY;
 
+        Debug.Log(valid_y);
+        Debug.Log(transform.position.y);
+
         if (valid_y < transform.position.y)
         {
             // 改变目标状态
@@ -156,24 +165,23 @@ public class ClownControl : MonoBehaviour {
             centerPos = other.transform.position;
 
             CircleCollider2D circle = other.gameObject.GetComponent<CircleCollider2D>();
-            CircleCollider2D plyer = gameObject.GetComponent<CircleCollider2D>();
 
             // 赋值半径
-            radius = circle.radius * other.transform.localScale.y + plyer.radius * transform.localScale.y;
+            radius = circle.radius * other.transform.localScale.y + (plyerCollider.radius - plyerCollider.offset.y) * transform.localScale.y;
 
             // 判断跳落的点是左边还是右边
             isLeft = (transform.position.x < centerPos.x) ? true : false;
 
             // 这个值应该是个小于90度的数
-            angleSpeed = Mathf.Asin((transform.position.y - centerPos.y) / radius) * 180 / Mathf.PI;
+            angleSpeed = Mathf.Asin((transform.position.y - centerPos.y) / radius) * Mathf.Rad2Deg;
 
             // 左右跳落角度需要处理
             if (!isLeft) angleSpeed = 180 - angleSpeed;
         }
-        else
-        {
-            birdDie();
-        }
+        //else
+        //{
+        //    birdDie();
+        //}
     }
 
     void ChangeTarget(GameObject other)
@@ -193,10 +201,11 @@ public class ClownControl : MonoBehaviour {
         isAir = false;
 
         // 改成走的动画
-        Spine.TrackEntry cur_ani = skelAni.state.SetAnimation(0, "down", false);
+        Spine.TrackEntry cur_ani = skelAni.state.SetAnimation(0, "donw", false);
         cur_ani.Complete += delegate {
             skelAni.state.SetAnimation(0, "go", true);
         };
+
     }
 
     void birdDie()
@@ -206,7 +215,7 @@ public class ClownControl : MonoBehaviour {
 
         GameControlScript.current.isGameOver = true;
 
-        skelAni.state.SetAnimation(0, "downdie", false).time = 9f/30f;
+        skelAni.state.SetAnimation(0, "donwdie", false).time = 9f/30f;
 
         rb2d.isKinematic = true;
     }

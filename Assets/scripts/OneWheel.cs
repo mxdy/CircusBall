@@ -11,17 +11,20 @@ public class OneWheel : Wheel {
         coll = gameObject.GetComponent<CircleCollider2D>();
 
         validPosY += transform.position.y + heightOffset;
-
+        
         rb2d.velocity = new Vector2(velocity, 0);
 
         wheelType = ConstantEnum.WheelType.one_wheel;
     }
 
+    public override void SetVelocity(float v)
+    {
+        rb2d.velocity = new Vector2(v, 0);
+    }
+
     public override void ChangeDir()
     {
-        velocity *= -1;
-
-        rb2d.velocity = new Vector2(velocity, 0);
+        SetVelocity(-velocity);
     }
 
     public override void DestoryMyself()

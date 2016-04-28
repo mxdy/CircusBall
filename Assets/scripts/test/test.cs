@@ -33,16 +33,17 @@ public class test : MonoBehaviour {
             }
             else
             {
-                angleSpeed -= 20 * Time.deltaTime * 3;
+                angleSpeed -= 20 * Time.deltaTime * 4;
                 if (angleSpeed <= 90f)
                 {
                     angleSpeed = 90f;
                 }
             }
 
-            float angle = angleSpeed * Mathf.PI / 180;
+            float angle = angleSpeed * Mathf.Deg2Rad;
 
-            endPos.x = target.position.x + centerPos.x - Mathf.Cos(angle) * radius;
+            endPos.x = target.position.x - Mathf.Cos(angle) * radius;
+
             endPos.y = centerPos.y + Mathf.Sin(angle) * radius;
 
             transform.position = endPos;
@@ -59,7 +60,7 @@ public class test : MonoBehaviour {
         centerPos = target.position;
         CircleCollider2D wheel = other.gameObject.GetComponent<CircleCollider2D>();
         CircleCollider2D player = gameObject.GetComponent<CircleCollider2D>();
-        radius = wheel.radius * target.localScale.y + player.radius * transform.localScale.y;
+        radius = wheel.radius * target.localScale.y + (player.radius - player.offset.y) * transform.localScale.y;
 
         other.transform.GetComponent<Rigidbody2D>().velocity = Vector2.right * 4;
 
@@ -67,7 +68,7 @@ public class test : MonoBehaviour {
         isLeft = (transform.position.x < centerPos.x) ? true : false;
 
         // 这个值应该是个小于90度的数
-        angleSpeed = Mathf.Asin((transform.position.y - centerPos.y) / radius) * 180 / Mathf.PI;
+        angleSpeed = Mathf.Asin((transform.position.y - centerPos.y) / radius) * Mathf.Rad2Deg;
 
         if (!isLeft) angleSpeed = 180 - angleSpeed;
     }

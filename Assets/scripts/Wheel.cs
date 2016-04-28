@@ -17,6 +17,8 @@ public class Wheel : MonoBehaviour {
         if (other.gameObject.tag == "wheelOfMine")
         {
             GameControlScript.current.BirdDied();
+
+            other.gameObject.GetComponent<Rigidbody2D>().isKinematic = true;
         }
     }
 
@@ -25,6 +27,10 @@ public class Wheel : MonoBehaviour {
     {
 
     }
+
+    // 改变速度
+    public virtual void SetVelocity(float v)
+    {}
 
     // 删除自己
     public virtual void DestoryMyself()

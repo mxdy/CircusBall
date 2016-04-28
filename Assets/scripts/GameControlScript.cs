@@ -10,6 +10,8 @@ public class GameControlScript : MonoBehaviour
 	int score = 0;								//the player's score
 	public bool isGameOver { get; set; }					//is the game over?
 
+    public GameObject clown;    // player
+
 
 	void Awake()
 	{

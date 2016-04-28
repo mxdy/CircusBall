@@ -21,7 +21,7 @@ public class DbWheel : Wheel {
         body_box = gameObject.GetComponent<BoxCollider2D>();
     }
 
-    void SetVelocity(float v)
+    public override void SetVelocity(float v)
     {
         Vector2 vel = new Vector2(v, 0);
         left_rb2d.velocity = vel;
@@ -37,8 +37,6 @@ public class DbWheel : Wheel {
 
     public override void ChangeDir()
     {
-        base.ChangeDir();
-
         SetVelocity(-velocity);
     }
 
@@ -50,7 +48,7 @@ public class DbWheel : Wheel {
         {
 
             v2.x = transform.position.x - targetLocalDistance;
-            v2.y = transform.position.y + body_box.size.y * transform.localScale.y - 0.4f;
+            v2.y = transform.position.y + (body_box.size.y- body_box.offset.y) * transform.localScale.y;
         }
         else
         {

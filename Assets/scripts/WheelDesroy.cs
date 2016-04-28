@@ -5,7 +5,10 @@ public class WheelDesroy : MonoBehaviour {
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.tag == "wheel")
+        string tag = other.gameObject.tag;
+        if (tag.CompareTo("oneWheel") > 0 
+            || tag.CompareTo("dbWheel") > 0
+            || tag.CompareTo("wheelOfMine") > 0)
         {
             Destroy(other.gameObject);
         }
