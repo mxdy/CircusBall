@@ -2,25 +2,46 @@
 using System.Collections;
 
 public class Wheel : MonoBehaviour {
-    public enum Direction { left, right }       // 方向
-    public float velocity = 2.0f;               // 速度
+    [HideInInspector]
+    public float velocity;                      // 速度
+    protected const float angleA = -100;        // 轮子根据速度提升旋转的增量
+    public float bornHoffset;                   // 出生高度偏移值
 
     [HideInInspector]
-    public float validPosY;                     // 有效高度
-    public float heightOffset = 0.3f;           // 有效高度偏移
+    public bool isChecked = false;
 
-    public ConstantEnum.WheelType wheelType;           // 轮子类型
+    [HideInInspector]
+    public float validPosY;                     // 有效高度（角色踩在上面的一个有效范围，之后需要优化成上半球的角度夹角）
+    public float heightOffset = 0.3f;           // 有效高度偏移 （相对于球中心的y的偏移量）
+    public ConstantEnum.WheelType wheelType;    // 轮子类型
+
     // 自己的检测
-    void OnCollisionEnter2D(Collision2D other)
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        OnTriggerWheel(other.gameObject);
+    }
+
+    void OnTriggerExit2D(Collider2D other)
+    {
+        isChecked = false;
+    }
+
+    public virtual void OnTriggerWheel(GameObject other)
     {
         // 和角色脚下的轮子碰撞到了 游戏结束
-        if (other.gameObject.tag == "wheelOfMine")
+        if (other.tag == "wheelOfMine")
         {
             GameControlScript.current.BirdDied();
-
-            other.gameObject.GetComponent<Rigidbody2D>().isKinematic = true;
         }
     }
+
+    public virtual void RandomVelocity(Vector2 v_range)
+    {
+        velocity = Random.Range(v_range.x, v_range.y);
+    }
+
+    public virtual void Move()
+    { }
 
     // 改变方向
     public virtual void ChangeDir()
@@ -30,7 +51,9 @@ public class Wheel : MonoBehaviour {
 
     // 改变速度
     public virtual void SetVelocity(float v)
-    {}
+    {
+        Debug.Log("set velocity -- parent call back");
+    }
 
     // 删除自己
     public virtual void DestoryMyself()

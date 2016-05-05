@@ -2,24 +2,33 @@
 using System.Collections;
 
 public class OneWheel : Wheel {
-    protected Rigidbody2D rb2d;                   // 轮子的刚体
-    protected CircleCollider2D coll;              // 轮子的碰撞体
+    protected CircleCollider2D coll;              // 
+    Transform wheelSprite;
+
 
     void Start()
     {
-        rb2d = gameObject.GetComponent<Rigidbody2D>();
         coll = gameObject.GetComponent<CircleCollider2D>();
+        wheelSprite = transform.Find("wheel_sprite");
 
         validPosY += transform.position.y + heightOffset;
-        
-        rb2d.velocity = new Vector2(velocity, 0);
-
         wheelType = ConstantEnum.WheelType.one_wheel;
+    }
+
+    void FixedUpdate()
+    {
+        Move();
+    }
+
+    public override void Move()
+    {
+        transform.Translate(new Vector2(velocity * Time.deltaTime, 0));
+        wheelSprite.Rotate(0, 0, angleA * velocity * Time.deltaTime, Space.Self);
     }
 
     public override void SetVelocity(float v)
     {
-        rb2d.velocity = new Vector2(v, 0);
+        velocity = v;
     }
 
     public override void ChangeDir()
@@ -32,6 +41,45 @@ public class OneWheel : Wheel {
         base.DestoryMyself();
 
         Destroy(gameObject);
+    }
+
+    public override void OnTriggerWheel(GameObject other)
+    {
+        base.OnTriggerWheel(other);
+
+        if (other.gameObject.tag != "wheelOfMine" 
+            && other.gameObject.tag != "Scenery"
+            && other.gameObject.tag != "Player"
+            && other.gameObject.tag != "Untagged"
+            && gameObject.tag != "Untagged")
+        {
+            Wheel other_wheel = other.gameObject.GetComponent<Wheel>();
+
+            // 还没有检测
+            if (!isChecked)
+            {
+                isChecked = true;
+                other_wheel.isChecked = true;
+
+                // 反向
+                if (other_wheel.velocity * velocity <= 0)
+                {
+                    ChangeDir();
+                    other_wheel.ChangeDir();
+                }
+                else // 同向
+                {
+                    if (Mathf.Abs(other_wheel.velocity) <= Mathf.Abs(velocity))
+                    {
+                        ChangeDir();
+                    }
+                    else
+                    {
+                        other_wheel.ChangeDir();
+                    }
+                }
+            }
+        }
     }
 
     public override Vector2 GetTargetPos(Transform tran = null)

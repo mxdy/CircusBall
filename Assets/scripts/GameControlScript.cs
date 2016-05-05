@@ -1,39 +1,44 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections;
 
 public class GameControlScript : MonoBehaviour 
 {
-	public static GameControlScript current;	//a reference to our game control so we can access it statically
-	public GUIText scoreText;					//a reference to text that shows the player's score
-	public GameObject gameOvertext;				//a reference to the object that contains the text that appears when the player dies
+	public static GameControlScript current;	// 当前控制全局对象
+	public GUIText scoreText;					// 分数label
+	public GameObject gameOvertext;				// 结束文字
+	int score = 0;								// 角色的分数
+    public GameObject clown;                    // 玩家对象
+    public int gameLevel;                       // 游戏难度级别
 
-	int score = 0;								//the player's score
-	public bool isGameOver { get; set; }					//is the game over?
+    public GUIText levelText;   // 当前难度
 
-    public GameObject clown;    // player
-
+	public bool isGameOver { get; set; }	    //游戏结束了没
 
 	void Awake()
 	{
-		//if we don't currently have a game control...
-		if (current == null)
-			//...set this one to be it...
-			current = this;
-		//...otherwise...
-		else if(current != this)
-			//...destroy this one because it is a duplicate
+        if (current == null)
+        {
+            current = this;
+        }
+        else if (current != this)
+        {
 			Destroy (gameObject);
+        }
+
+        gameLevel = 1;
 	}
 
 	void Update()
 	{
-		//if the game is over and the player has pressed some input...
 		if (isGameOver && Input.anyKey) 
 		{
-			//...start a new game.
-			Application.LoadLevel(Application.loadedLevel);		
+            // 重玩
+            SceneManager.LoadScene("Main");
 		}
-	}
+
+        levelText.text = "level:" + gameLevel.ToString();
+    }
 
 	public void BirdScored()
 	{

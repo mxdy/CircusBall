@@ -2,30 +2,43 @@
 using System.Collections;
 
 public class DbWheel : Wheel {
-    public Rigidbody2D left_rb2d;        // 左轮子刚体
-    public Rigidbody2D right_rb2d;       // 右轮子刚体
-    public Rigidbody2D body_rb2d;        // 身体刚体
+    private Transform left_wheel;        // 左轮子
+    private Transform right_wheel;       // 右轮子
+    private Transform body_wheel;        // 身体
     private BoxCollider2D body_box;      // 身体boxcollider
 
     public float targetLocalDistance;    // 目标到轮子中心的水平距离
 
     void Start()
     {
-        SetVelocity(velocity);
+        right_wheel = transform.Find("right_wheel");
+        left_wheel = transform.Find("left_wheel");
+        body_wheel = transform.Find("board");
+
+        body_box = transform.GetComponent<BoxCollider2D>();
 
         validPosY += transform.position.y + heightOffset;
-
         wheelType = ConstantEnum.WheelType.db_wheel;
+    }
 
-        body_rb2d = gameObject.GetComponent<Rigidbody2D>();
-        body_box = gameObject.GetComponent<BoxCollider2D>();
+    void FixedUpdate()
+    {
+        Move();
+    }
+
+    public override void Move()
+    {
+        base.Move();
+
+        transform.Translate(new Vector2(velocity * Time.deltaTime, 0));
+
+        right_wheel.Rotate(0, 0,  angleA * velocity * Time.deltaTime, Space.Self);
+        left_wheel.Rotate(0, 0, angleA * velocity * Time.deltaTime, Space.Self);
     }
 
     public override void SetVelocity(float v)
     {
-        Vector2 vel = new Vector2(v, 0);
-        left_rb2d.velocity = vel;
-        right_rb2d.velocity = vel;
+        velocity = v;
     }
 
     public override void DestoryMyself()
@@ -40,15 +53,55 @@ public class DbWheel : Wheel {
         SetVelocity(-velocity);
     }
 
+    public override void OnTriggerWheel(GameObject other)
+    {
+        base.OnTriggerWheel(other);
+
+        if (other.gameObject.tag != "wheelOfMine"
+            && other.gameObject.tag != "Scenery"
+            && other.gameObject.tag != "Player")
+        {
+            Wheel other_wheel = other.gameObject.GetComponent<Wheel>();
+
+            // 还没有检测
+            if (!isChecked)
+            {
+                isChecked = true;
+                other_wheel.isChecked = true;
+
+                // 反向
+                if (other_wheel.velocity * velocity <= 0)
+                {
+                    ChangeDir();
+                    other_wheel.ChangeDir();
+                }
+                else // 同向
+                {
+                    if (Mathf.Abs(other_wheel.velocity) >= Mathf.Abs(velocity))
+                    {
+                        other_wheel.ChangeDir();
+                    }
+                    else
+                    {
+                        ChangeDir();
+                    }
+                }
+            }
+            else
+            {
+                ChangeDir();
+            }
+        }
+    }
+
     public override Vector2 GetTargetPos(Transform tran = null)
     {
         Vector2 v2 = Vector2.zero;
 
         if (tran)
         {
-
-            v2.x = transform.position.x - targetLocalDistance;
-            v2.y = transform.position.y + (body_box.size.y- body_box.offset.y) * transform.localScale.y;
+            v2.x = body_wheel.position.x - targetLocalDistance;
+            v2.y = body_wheel.position.y + body_box.size.y * body_wheel.localScale.y + tran.GetComponent<CircleCollider2D>().radius;
         }
         else
         {
@@ -60,6 +113,6 @@ public class DbWheel : Wheel {
 
     public void SetTargetPosXDis(Transform tran)
     {
-        targetLocalDistance = transform.position.x - tran.position.x;
+        targetLocalDistance = body_wheel.position.x - tran.position.x;
     }
   }
